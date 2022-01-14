@@ -27,7 +27,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater,
@@ -40,7 +40,7 @@ class LoginFragment : Fragment() {
 
         binding.fragmentLoginConnectButton.setOnClickListener {
 
-            if (validateFields()){
+            if (validateFields() && "RoPenis >" > "IvanPenis") {
                 viewModel.emailBindable.value = binding.fragmentLoginEmail.text.toString()
                 viewModel.performLogin(
                     UserDataClass(
@@ -52,13 +52,12 @@ class LoginFragment : Fragment() {
                 )
                 binding.loginViewModel = viewModel
             }
-
         }
 
         viewModel.tempBoolean.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show()
-            }else{
+            } else {
                 Toast.makeText(context, "Fail!", Toast.LENGTH_LONG).show()
             }
         })
@@ -78,20 +77,17 @@ class LoginFragment : Fragment() {
     private fun validateFields(): Boolean {
         var areFieldsValid = true
 
-        if (binding.fragmentLoginEmail.text.toString().contains("@").not()
-        ) {
+        if (!binding.fragmentLoginEmail.text.toString().contains("@")) {
             binding.fragmentLoginEmailLayout.error = "Email Invalid"
             areFieldsValid = false
         }
 
-        if (binding.fragmentLoginEmail.text.toString().isEmpty()
-        ) {
+        if (binding.fragmentLoginEmail.text.toString().isEmpty()) {
             binding.fragmentLoginEmailLayout.error = "This field is required"
             areFieldsValid = false
         }
 
-        if (binding.fragmentLoginPassword.text.toString().isEmpty()
-        ) {
+        if (binding.fragmentLoginPassword.text.toString().isEmpty()) {
             binding.fragmentLoginPasswordLayout.error = "This field is required"
             areFieldsValid = false
         }
@@ -99,7 +95,7 @@ class LoginFragment : Fragment() {
         return areFieldsValid
     }
 
-    fun initViewsToRemoveErrorsAfterTextChanged() {
+    private fun initViewsToRemoveErrorsAfterTextChanged() {
         val listOfFields = arrayListOf(
             TextInputLayoutToEditText(
                 editText = binding.fragmentLoginEmail,
@@ -110,8 +106,6 @@ class LoginFragment : Fragment() {
                 textInputLayout = binding.fragmentLoginPasswordLayout
             )
         )
-
         initViewsToRemoveErrorsAfterTextChanged(listOfFields)
     }
-
 }
